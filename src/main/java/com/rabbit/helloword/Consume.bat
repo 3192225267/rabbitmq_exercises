@@ -23,10 +23,10 @@ public class Customer {
 //        Connection connection=connectionFactory.newConnection();
         Connection connection = RabbitMQUtils.getConnectionFactory();
         Channel channel =connection.createChannel();
-        // 参数 1：消费哪个队列的消息 队列名称
-        // 参数 2：开始消息的自动确认机制
-        // 参数 3：消费是时的回调接口
         channel.queueDeclare("hello",false,false,false,null);
+                // 参数 1：消费哪个队列的消息 队列名称
+                // 参数 2：开始消息的自动确认机制
+                // 参数 3：消费是时的回调接口
         channel.basicConsume("hello",true,new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,byte[] body) {

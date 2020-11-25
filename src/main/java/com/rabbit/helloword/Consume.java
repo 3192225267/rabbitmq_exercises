@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
  * @author 刘振河
  * @create 2020--11--21 13:06
  */
-public class Customer {
+public class Consume {
     public static void main(String[] args) throws IOException, TimeoutException {
         Connection connection = RabbitMQUtils.getConnectionFactory();
         Channel channel =connection.createChannel();

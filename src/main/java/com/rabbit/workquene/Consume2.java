@@ -9,15 +9,20 @@ import java.io.IOException;
  * @author 刘振河
  * @create 2020--11--21 18:02
  */
-public class Custmore2 {
+public class Consume2 {
     public static void main(String[] args) throws IOException {
         Connection connection = RabbitMQUtils.getConnectionFactory();
         Channel channel = connection.createChannel();
+        // 限制消费方每次只能处理一条消息
+        channel.basicQos(1);
         channel.queueDeclare("hello",false,false,false,null);
-        channel.basicConsume("hello",true,new DefaultConsumer(channel){
+        // 关闭消息队列的自动确认消息机制（第二个参数）
+        channel.basicConsume("hello",false,new DefaultConsumer(channel){
             @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 System.out.println("药水哥紧随其后，拿到了"+new String(body));
+                channel.basicAck(envelope.getDeliveryTag(),false);
+
             }
         });
     }
